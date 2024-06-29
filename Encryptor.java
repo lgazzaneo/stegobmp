@@ -1,11 +1,10 @@
-import javax.crypto.*;
-import javax.crypto.spec.*;
 import java.nio.charset.StandardCharsets;
 import java.security.*;
 import java.security.spec.InvalidKeySpecException;
 import java.security.spec.KeySpec;
 import java.util.Arrays;
-import java.util.Base64;
+import javax.crypto.*;
+import javax.crypto.spec.*;
 
 public class Encryptor {
 
@@ -148,7 +147,7 @@ public class Encryptor {
     public static void main(String[] args) {
         String[] algorithms = {"DES", "AES"};
         String[] modes = {"ECB", "CBC", "CFB", "OFB"};
-        String password = "margarita";
+        String password = "sorpresa";
         String messageToEncrypt = "Hello World!";
 
         for (String algorithm : algorithms) {

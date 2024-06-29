@@ -84,6 +84,7 @@ public class StegoBmp{
                 byte[] fileBytes = Files.readAllBytes(new File(inFile).toPath());
                 int fileSize = fileBytes.length;
                 String fileExtension = getFileExtension(inFile) + "\0";
+                System.err.println(fileExtension);
                 byte[] extBytes = fileExtension.getBytes();
                 byte[] sizeBytes = intToBytes(fileSize);
                 byte[] dataToHide = new byte[sizeBytes.length + fileBytes.length + extBytes.length];
@@ -196,6 +197,7 @@ public class StegoBmp{
                 String extension = new String(extBites);
                 String path = outFile.concat(extension);
                 Path finalPath = Paths.get(path);
+                System.err.println(extension);
                 Files.write(finalPath, fileData);
                 
                 System.out.println("File extracted successfully.");
@@ -319,7 +321,7 @@ public class StegoBmp{
     private static String getFileExtension(String fileName) {
         int dotIndex = fileName.lastIndexOf('.');
         if (dotIndex > 0 && dotIndex < fileName.length() - 1) {
-            return fileName.substring(dotIndex + 1);
+            return fileName.substring(dotIndex);
         }
         return "";
     }
