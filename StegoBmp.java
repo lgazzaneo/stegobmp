@@ -188,7 +188,7 @@ public class StegoBmp{
                         }
                     }
                     fileData = Arrays.copyOfRange(dataDecoded, 0, pospoint);
-                    extBites = Arrays.copyOfRange(dataDecoded, pospoint, dataDecoded.length);
+                    extBites = Arrays.copyOfRange(dataDecoded, pospoint, dataDecoded.length - 1);
                 }
 
                

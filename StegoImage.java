@@ -219,6 +219,7 @@ public class StegoImage {
                     cont++;
                 }
                 content[contentLen + bytecont] = isZero;
+                bytecont++;
             }
     
             int finalLen = contentLen + bytecont;
