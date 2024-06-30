@@ -50,16 +50,22 @@ public class StegoImage {
 
     public static byte[] stegoLSBI(byte[] bmpData, byte[] byteMsg){
 
-        Integer[] LBC = new Integer[4]; // ultimo bit cambiado
-        Integer[] LBNC = new Integer[4]; // ultimo bit no cambiado
-        Integer[] IB = new Integer[4]; // bit inversor
+        int[] LBC = {0, 0, 0, 0}; // ultimo bit cambiado
+        int[] LBNC = {0, 0, 0, 0}; // ultimo bit no cambiado
+        int[] IB = {0, 0, 0, 0}; // bit inversor
 
         BMPReader bmpReading = new BMPReader();
         int messageLength = byteMsg.length;
         int messageLengthByBits = messageLength * 8;
         int bmpOffset = bmpReading.getOffset(bmpData) + 4; //los 4 bits de inversion
+        int aux = bmpData.length - bmpOffset - 2;
+        aux = aux * 2;
+        float aux2 = aux / 3;
+        aux = (int)aux2 + 1;
         
-        if ((((bmpData.length - bmpOffset - 2)*(2/3))+ 1) < messageLengthByBits) {
+        System.out.println(byteMsg.length);
+        
+        if (aux < messageLengthByBits) {
             System.err.println("Image to Small to Hold Message");
             return bmpData;
         }
@@ -131,6 +137,7 @@ public class StegoImage {
             else{
                 IB[k] = 0;
             }
+            System.out.println(IB[k]);
         }
 
         int newOffset = bmpOffset - 4;
@@ -141,7 +148,7 @@ public class StegoImage {
 
         redByteCount = 2;
 
-        for (int i = 0; i < messageLength; i++) {
+        for (int i = 0; i < indexCount; i++) {
             bmpIndex = bmpOffset + i;
             
             if(redByteCount % 3 != 0){ //No es el Red

@@ -83,6 +83,7 @@ public class StegoBmp{
 
                 byte[] fileBytes = Files.readAllBytes(new File(inFile).toPath());
                 int fileSize = fileBytes.length;
+                System.out.println(fileSize);
                 String fileExtension = getFileExtension(inFile) + "\0";
                 System.err.println(fileExtension);
                 byte[] extBytes = fileExtension.getBytes();
@@ -92,12 +93,24 @@ public class StegoBmp{
                 System.arraycopy(sizeBytes, 0, dataToHide, 0, sizeBytes.length);
                 System.arraycopy(fileBytes, 0, dataToHide, sizeBytes.length, fileBytes.length);
                 System.arraycopy(extBytes, 0, dataToHide, sizeBytes.length + fileBytes.length, extBytes.length);
+                System.out.println(sizeBytes[0]);
+                System.out.println(sizeBytes[1]);
+                System.out.println(sizeBytes[2]);
+                System.out.println(sizeBytes[3]);
 
                 // Encrypt the data before embedding if encryption is enabled
                 byte[] dataToEmbed = dataToHide;
+                byte[] encodedData = dataToEmbed;
                 if (password != null) {
                     dataToEmbed = cipher.encryptMessage(dataToHide, password);
+                    byte[] lenbytes = intToBytes(dataToEmbed.length);
+                    encodedData = new byte[4 + dataToEmbed.length];
+                    System.arraycopy(lenbytes, 0, encodedData, 0, 4);
+                    System.arraycopy(dataToEmbed, 0, encodedData, 4, dataToEmbed.length);
+                    System.out.println(encodedData.length);
                 }
+
+
 
                 //writeHexToFile(dataToEmbed, "embedded_data_hex.txt");
                 BMPReader ImageReader = new BMPReader();
@@ -111,13 +124,13 @@ public class StegoBmp{
 
                 switch (stegMethod) {
                     case "LSB1":
-                        finishData = StegoImage.stegoLSB1(imageData, dataToEmbed);
+                        finishData = StegoImage.stegoLSB1(imageData, encodedData);
                         break;
                     case "LSB4":
-                        finishData = StegoImage.stegoLSB4(imageData, dataToEmbed);
+                        finishData = StegoImage.stegoLSB4(imageData, encodedData);
                         break;
                     case "LSBI":
-                        finishData = StegoImage.stegoLSBI(imageData, dataToEmbed);
+                        finishData = StegoImage.stegoLSBI(imageData, encodedData);
                         break;
                     default:
                         System.out.println("Invalid steganography method.");
@@ -178,6 +191,7 @@ public class StegoBmp{
                 if (password != null) {
                     dataDecoded = cipher.decryptMessage(dataToExtract, password);
                     fileSize = bytesToInt(Arrays.copyOfRange(dataDecoded, 0, 4));
+                    System.out.println(fileSize);
                     fileData = Arrays.copyOfRange(dataDecoded, 4, 4 + fileSize);
                     extBites = Arrays.copyOfRange(dataDecoded, 4 + fileSize, dataDecoded.length - 1);
                 }else{
@@ -309,7 +323,7 @@ public class StegoBmp{
         return ((bytes[0] & 0xFF) << 24) | ((bytes[1] & 0xFF) << 16) | ((bytes[2] & 0xFF) << 8) | (bytes[3] & 0xFF);
     }
 
-    private static byte[] intToBytes(int value) {
+    public static byte[] intToBytes(int value) {
         return new byte[]{
                 (byte) (value >> 24),
                 (byte) (value >> 16),
@@ -318,7 +332,7 @@ public class StegoBmp{
         };
     }
 
-    private static String getFileExtension(String fileName) {
+    public static String getFileExtension(String fileName) {
         int dotIndex = fileName.lastIndexOf('.');
         if (dotIndex > 0 && dotIndex < fileName.length() - 1) {
             return fileName.substring(dotIndex);

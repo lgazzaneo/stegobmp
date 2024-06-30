@@ -1,3 +1,4 @@
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -5,20 +6,35 @@ import java.nio.file.Paths;
 
 public class Analysis {
 
-    public static void main(String[] args) {
-        String bmpFile = "data/lima.bmp";
+    public static void main(String[] args) throws IOException {
+        String file = "example.txt";
+
+        byte[] fileBytes = Files.readAllBytes(new File(file).toPath());
+        int fileSize = fileBytes.length;
+        System.out.println(fileSize);
+        String fileExtension2 = StegoBmp.getFileExtension(file) + "\0";
+        System.out.println(fileExtension2);
+        byte[] extBytes = fileExtension2.getBytes();
+        byte[] sizeBytes = StegoBmp.intToBytes(fileSize);
+        byte[] dataToHide = new byte[sizeBytes.length + fileBytes.length + extBytes.length];
+
+        System.arraycopy(sizeBytes, 0, dataToHide, 0, sizeBytes.length);
+        System.arraycopy(fileBytes, 0, dataToHide, sizeBytes.length, fileBytes.length);
+        System.arraycopy(extBytes, 0, dataToHide, sizeBytes.length + fileBytes.length, extBytes.length);
+
+        String bmpFile = "quilmes.bmp";
 
             BMPReader bmpReader = new BMPReader();
             byte[] bmpData = bmpReader.readImage(bmpFile);
 
             // Attempt to extract encoded data using the LSB4 method
-            byte[] extractedLSBI = StegoImage.steganalisisLSB4(bmpData, true);
+            byte[] extractedLSBI = StegoImage.stegoLSBI(bmpData, dataToHide);
 
-            Encryptor encriptador = new Encryptor("aes", "cbc");
+            //Encryptor encriptador = new Encryptor("aes", "cbc");
 
-            String pass = "sorpresa";
+            //String pass = "sorpresa";
             
-            byte[] decryptedfile = encriptador.decryptMessage(extractedLSBI, pass);
+            //byte[] decryptedfile = encriptador.decryptMessage(extractedLSBI, pass);
             
             // Find the position of the first ASCII code for '.'
             int dotIndex = -1;
