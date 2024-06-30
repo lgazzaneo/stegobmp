@@ -8,7 +8,7 @@ import javax.crypto.spec.*;
 
 public class Encryptor {
 
-    private final String algorithm;
+    private String algorithm;
     private final String mode;
     private final int ivSize; // Size of the initialization vector
 
@@ -23,15 +23,21 @@ public class Encryptor {
             Cipher cipher = null;
             SecretKey secretKey = null;
             IvParameterSpec ivParameterSpec = null;
-
+            int keySize =128;
             // Determine key size based on algorithm
-            int keySize = 128; // Default to AES-128
             if (algorithm.equalsIgnoreCase("aes192")) {
                 keySize = 192;
+                algorithm="AES";
             } else if (algorithm.equalsIgnoreCase("aes256")) {
                 keySize = 256;
+                algorithm="AES";
+
             } else if (algorithm.equalsIgnoreCase("des")) {
                 keySize = 64; // DES key size is 64 bits (8 bytes)
+                algorithm="DES";
+            }
+            else {
+                algorithm="AES";
             }
 
             // Generate secret key from password
@@ -75,13 +81,21 @@ public class Encryptor {
             IvParameterSpec ivParameterSpec = null;
 
             // Determine key size based on algorithm
-            int keySize = 128; // Default to AES-128
+            int keySize =128;
+            // Determine key size based on algorithm
             if (algorithm.equalsIgnoreCase("aes192")) {
                 keySize = 192;
+                algorithm="AES";
             } else if (algorithm.equalsIgnoreCase("aes256")) {
                 keySize = 256;
+                algorithm="AES";
+
             } else if (algorithm.equalsIgnoreCase("des")) {
                 keySize = 64; // DES key size is 64 bits (8 bytes)
+                algorithm="DES";
+            }
+            else {
+                algorithm="AES";
             }
 
             // Generate secret key from password
