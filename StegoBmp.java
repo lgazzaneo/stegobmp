@@ -63,10 +63,10 @@ public class StegoBmp{
         }
 
         try {
-            Encryptor cipher = new Encryptor("AES", "DES");
+            Encryptor cipher = new Encryptor("AES", "CBC");
 
             if (password != null) {
-                if (algorithm == null) {
+                if (algorithm == null || algorithm.equals("aes128")) {
                     algorithm = "AES";
                 }
                 if (mode == null) {
