@@ -99,6 +99,9 @@ public class Encryptor {
             }
 
             // Generate secret key from password
+            System.out.println("Encryption algorithm :  " + algorithm ) ;
+            System.out.println("Key size  " + keySize ) ;
+            System.out.println("Encryption mode :  " + mode ) ;
             SecretKey derivedKey = generateKey(password, algorithm.equalsIgnoreCase("des") ? "DES" : "AES", keySize);
             secretKey = new SecretKeySpec(Arrays.copyOfRange(derivedKey.getEncoded(), 0, keySize / 8), algorithm);
 
