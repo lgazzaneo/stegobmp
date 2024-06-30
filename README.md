@@ -21,9 +21,9 @@ java StegoBmp.java -extract -p data/ladoLSBIaesofbsalt0.bmp -out test -steg LSBI
 ```
 
 ```bash
-java StegoBmp -embed -in example.txt -b quilmes.bmp -out quilmesHidden.bmp -steg LSBI -pass password -a AES128 -m CBC
+java StegoBmp.java -embed -in example.txt -b quilmes.bmp -out quilmesHidden.bmp -steg LSBI -pass password -a AES128 -m CBC
 ```
 
 ```bash
-java StegoBmp -extract -p quilmesHidden.bmp -out example_out -steg LSBI -pass password -a AES128 -m CBC
+java StegoBmp.java -extract -p quilmesHidden.bmp -out example_out -steg LSBI -pass password -a AES128 -m CBC
 ```
